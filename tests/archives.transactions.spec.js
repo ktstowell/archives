@@ -17,7 +17,7 @@ module.exports = function(data) {
   // CREATE
   //------------------------------------------------------------------------------------------//
   // @description
-  vows.describe('ARCHIVE:TRANSACTIONS:CREATE').addBatch({
+  var create = vows.describe('ARCHIVE:TRANSACTIONS:CREATE').addBatch({
     'When creating a user: ': {
       topic: function() {
         var self = this;
@@ -33,13 +33,13 @@ module.exports = function(data) {
         assert.isNotEmpty(data);
       }
     }
-  }).run({reporter: reporter});
+  });
 
   //
   // READ
   //------------------------------------------------------------------------------------------//
   // @description
-  vows.describe('ARCHIVE:TRANSACTIONS:READ').addBatch({
+  var read = vows.describe('ARCHIVE:TRANSACTIONS:READ').addBatch({
     'When finding a record within the archives': {
       topic: function() {
         var self = this;
@@ -56,13 +56,13 @@ module.exports = function(data) {
         assert.notEqual(data, undefined);
       }
     }
-  }).run({reporter: reporter});
+  });
 
   //
   // UPDATE
   //------------------------------------------------------------------------------------------//
   // @description
-  vows.describe('ARCHIVE:TRANSACTIONS:UPDATE').addBatch({
+  var update = vows.describe('ARCHIVE:TRANSACTIONS:UPDATE').addBatch({
     'When updating a record within the archive': {
       topic: function() {
         var self = this;
@@ -79,18 +79,18 @@ module.exports = function(data) {
         assert.notEqual(data, null);
       }
     }
-  }).run({reporter: reporter});
+  });
 
   //
   // DELETE
   //------------------------------------------------------------------------------------------//
   // @description
-  vows.describe('ARCHIVE:TRANSACTIONS:DELETE').addBatch({
+  var remove = vows.describe('ARCHIVE:TRANSACTIONS:DELETE').addBatch({
     'When deleting a record from within the data base.':  {
       topic: function () {
         var self = this;
-
-        Archives('users').delete({record: Data.User}).then(function(data) {
+        console.log(Data.User)
+        Archives('users').delete({record: {_id:Data.User._id}}).then(function(data) {
           self.callback(null, data);
         }, function(err) {
           self.callback(err, null);
@@ -102,5 +102,25 @@ module.exports = function(data) {
         assert.notEqual(data, null);
       }
     }
-  }).run({reporter: reporter});
+  });
+
+  //
+  // RUN
+  //------------------------------------------------------------------------------------------//
+  // @description Execute specs
+
+  // Create
+  create.run({reporter: reporter}, function() {
+    // Run read spec.
+    read.run({reporter: reporter}, function() {
+      // Update
+      update.run({reporter: reporter}, function() {
+        // Delete
+        remove.run({reporter: reporter}, function(results) {
+          console.log('Specs executed: ', results);
+          process.exit(0);
+        });
+      });
+    });
+  });
 };
