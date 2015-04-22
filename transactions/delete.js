@@ -19,7 +19,9 @@ module.exports = function(Transactions) {
     var def = q.defer();
 
     Transactions.validate({type:'Delete', data: spec}).then(function() {
+      console.log(spec)
       collection.remove(spec.record, {w:1}, function(err) {
+        console.log('remove callback')
         if(err) {
           err = Transactions.Messages.Delete.error(err);
 
@@ -27,7 +29,7 @@ module.exports = function(Transactions) {
             def.reject(err);
           });
         } else {
-          Transactions.Logger.log({type: 'success', message: Transactions.Delete.success(Transactions.Logger.log.format(spec.record))}).then(function() {
+          Transactions.Logger.log({type: 'success', message: Transactions.Messages.Delete.success(Transactions.Logger.log.format(spec.record))}).then(function() {
             def.resolve(spec.record);
           });
         }
