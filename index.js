@@ -25,37 +25,41 @@ module.exports = function(spec) {
   // ARCHIVE VALIDATION
   //------------------------------------------------------------------------------------------//
   // @description
-    Archives.validate = function(validators, data, def) {
-      var failed = {};
-      // Stored promise obj
-      def = def || q.defer();
+  Archives.validate = function(validators, data, def) {
+    var failed = {};
+    // Stored promise obj
+    def = def || q.defer();
 
-      if(!data) { failed['undefined'] = validators['undefined']; }
+    if(!data) { failed['undefined'] = validators['undefined']; }
 
-      for(var prop in validators.required) {
-        if(!data || !data[prop]) { failed[prop] = validators.required[prop]; }
+    for(var prop in validators.required) {
+      if(!data || !data[prop]) { failed[prop] = validators.required[prop]; }
+    }
+
+    if(Object.keys(failed).length) {
+      def.reject(failed);
+    } else {
+      def.resolve();
+    }
+
+    return def.promise;
+  };
+
+  /**
+   * Module level config validation.
+   * @type {{DB: {undefined: string, required: {name: string}}, failed: Function}}
+   */
+  Archives.validation = {
+    DB: {
+      undefined: 'ARCHIVES: Please provide the Archives with a config object: require{"archives"}({DB: {}})',
+      required: {
+        name: 'ARCHIVES: Please provide us the name of the database you wish to connect to within the DB object.'
       }
-
-      if(Object.keys(failed).length) {
-        def.reject(failed);
-      } else {
-        def.resolve();
-      }
-
-      return def.promise;
-    };
-
-    Archives.validation = {
-      DB: {
-        undefined: 'ARCHIVES: Please provide the Archives with a config object: require{"archives"}({DB: {}})',
-        required: {
-          name: 'ARCHIVES: Please provide us the name of the database you wish to connect to within the DB object.'
-        }
-      },
-      failed: function(errs) {
-        return 'ARCHIVES: Initialization failed with the following errors: '+ Archives.Logger.format(errs);
-      }
-    };
+    },
+    failed: function(errs) {
+      return 'ARCHIVES: Initialization failed with the following errors: '+ Archives.Logger.format(errs);
+    }
+  };
 
   //
   // ARCHIVE DEFAULTS
