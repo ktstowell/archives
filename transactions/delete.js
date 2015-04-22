@@ -19,9 +19,9 @@ module.exports = function(Transactions) {
     var def = q.defer();
 
     Transactions.validate({type:'Delete', data: spec}).then(function() {
-      console.log(spec)
+
       collection.remove(spec.record, {w:1}, function(err) {
-        console.log('remove callback')
+
         if(err) {
           err = Transactions.Messages.Delete.error(err);
 
