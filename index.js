@@ -148,5 +148,11 @@ module.exports = function(spec) {
     return def.promise;
   };
 
+  /**
+   * Expose underlying DB 
+   * @type {[type]}
+   */
+  API.__db__ = Archives.DB;
+
   return API;
 };

@@ -1,6 +1,6 @@
 {
   "name": "archives",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "MongoDB transactional wrapper for Node.js applications.",
   "main": "index.js",
   "directories": {
