@@ -3,11 +3,8 @@
   "version": "0.0.1",
   "description": "MongoDB transactional wrapper for Node.js applications.",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "node ./tests/archives.spec.js"
+    "test": "vows --spec"
   },
   "repository": {
     "type": "git",
@@ -29,5 +26,10 @@
     "mongodb": "^2.0.27",
     "q": "^1.2.0",
     "vows": "^0.8.1"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "log": "^1.4.0",
+    "validate": "^3.0.1"
   }
 }
